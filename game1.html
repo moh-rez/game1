@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>بازی کلیک دایره</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #282c34;
+    margin: 0;
+    font-family: Tahoma, sans-serif;
+    color: white;
+    flex-direction: column;
+  }
+  #gameArea {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background: #3b3f47;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  #circle {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: #61dafb;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  #score {
+    margin-top: 20px;
+    font-size: 1.5rem;
+  }
+  #timer {
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>بازی کلیک دایره</h1>
+<div id="gameArea">
+  <div id="circle"></div>
+</div>
+<div id="score">امتیاز: 0</div>
+<div id="timer">زمان: 30 ثانیه</div>
+
+<script>
+  const circle = document.getElementById('circle');
+  const gameArea = document.getElementById('gameArea');
+  const scoreDisplay = document.getElementById('score');
+  const timerDisplay = document.getElementById('timer');
+
+  let score = 0;
+  let timeLeft = 30; // ثانیه
+  let gameInterval;
+  let timerInterval;
+
+  function moveCircle() {
+    const maxX = gameArea.clientWidth - circle.clientWidth;
+    const maxY = gameArea.clientHeight - circle.clientHeight;
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+    circle.style.left = randomX + 'px';
+    circle.style.top = randomY + 'px';
+  }
+
+  function startGame() {
+    score = 0;
+    timeLeft = 30;
+    scoreDisplay.textContent = 'امتیاز: ' + score;
+    timerDisplay.textContent = 'زمان: ' + timeLeft + ' ثانیه';
+    moveCircle();
+    circle.style.display = 'block';
+
+    gameInterval = setInterval(moveCircle, 1000);
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      timerDisplay.textContent = 'زمان: ' + timeLeft + ' ثانیه';
+      if (timeLeft <= 0) {
+        endGame();
+      }
+    }, 1000);
+  }
+
+  function endGame() {
+    clearInterval(gameInterval);
+    clearInterval(timerInterval);
+    circle.style.display = 'none';
+    alert('بازی تموم شد! امتیاز شما: ' + score);
+  }
+
+  circle.addEventListener('click', () => {
+    score++;
+    scoreDisplay.textContent = 'امتیاز: ' + score;
+    moveCircle();
+  });
+
+  startGame();
+</script>
+
+</body>
+</html>
